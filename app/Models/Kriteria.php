@@ -12,6 +12,7 @@ class Kriteria extends Model
 
     protected $fillable = [
         'nama',
+        'definisi',
         'parent_id',
         'has_sub_kriteria',
         'tipe_input',

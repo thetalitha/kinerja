@@ -11,6 +11,7 @@ class SkalaLinguistik extends Model
     protected $fillable = [
         'kriteria_id',
         'label',
+        'definisi',
         'urutan',
     ];
 

@@ -34,6 +34,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
     Route::post('/penilaian', [PenilaianController::class, 'store'])->name('penilaian.store');
     Route::get('/penilaian/{userId}/get', [PenilaianController::class, 'getPenilaian'])->name('penilaian.get');
+    Route::get('/penilaian/{userId}/sync-logbook', [PenilaianController::class, 'getSyncLogbook'])->name('penilaian.sync.logbook');
 
 });
 

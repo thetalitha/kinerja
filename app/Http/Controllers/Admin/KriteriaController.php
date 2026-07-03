@@ -44,25 +44,25 @@ class KriteriaController extends Controller
 
     public function store(Request $request)
     {
-        $hasSub = $request->input('has_sub_kriteria') === '1';
+        $hasSub       = $request->input('has_sub_kriteria') === '1';
         $isLinguistik = !$hasSub && $request->tipe_input === 'linguistik';
 
         $request->validate([
             'nama'             => 'required|string|max:255',
+            'definisi'         => 'nullable|string|max:1000',
             'has_sub_kriteria' => 'required',
-            'tipe_input'       => 'nullable|in:numerik,linguistik','persentase',
-            'tipe_nilai'       => 'nullable|in:benefit, cost',
+            'tipe_input'       => 'nullable|in:numerik,linguistik,persentase',
+            'tipe_nilai'       => 'nullable|in:benefit,cost',
             'input_min'        => 'nullable|numeric',
             'input_max'        => 'nullable|numeric',
             'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
             'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
         ]);
-
-
-        $hasSub = $request->input('has_sub_kriteria') === '1';
 
         $id = DB::table('kriteria')->insertGetId([
             'nama'             => $request->nama,
+            'definisi'         => $request->definisi,
             'parent_id'        => null,
             'has_sub_kriteria' => $hasSub,
             'tipe_input'       => $hasSub ? null : $request->tipe_input,
@@ -79,6 +79,7 @@ class KriteriaController extends Controller
                 DB::table('skala_linguistik')->insert([
                     'kriteria_id' => $id,
                     'label'       => $skala['label'],
+                    'definisi'    => $skala['definisi'] ?? null,
                     'urutan'      => $i + 1,
                     'created_at'  => now(),
                     'updated_at'  => now(),
@@ -101,23 +102,24 @@ class KriteriaController extends Controller
         $kriteria = DB::table('kriteria')->where('id', $id)->first();
         if (!$kriteria) abort(404);
 
-        $hasSub = (bool) $kriteria->has_sub_kriteria;
+        $hasSub       = (bool) $kriteria->has_sub_kriteria;
         $isLinguistik = !$hasSub && $request->tipe_input === 'linguistik';
 
         $request->validate([
-            'nama'          => 'required|string|max:255',
-            'tipe_input'    => 'nullable|in:numerik,linguistik','persentase',
-            'tipe_nilai'    => 'nullable|in:benefit, cost',
-            'input_min'     => 'nullable|numeric',
-            'input_max'     => 'nullable|numeric',
-            'skala'         => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
-            'skala.*.label' => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'nama'             => 'required|string|max:255',
+            'definisi'         => 'nullable|string|max:1000',
+            'tipe_input'       => 'nullable|in:numerik,linguistik,persentase',
+            'tipe_nilai'       => 'nullable|in:benefit,cost',
+            'input_min'        => 'nullable|numeric',
+            'input_max'        => 'nullable|numeric',
+            'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
+            'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
         ]);
-
-        $hasSub = (bool) $kriteria->has_sub_kriteria;
 
         DB::table('kriteria')->where('id', $id)->update([
             'nama'       => $request->nama,
+            'definisi'   => $request->definisi,
             'tipe_input' => $hasSub ? null : $request->tipe_input,
             'tipe_nilai' => (!$hasSub && in_array($request->tipe_input, ['numerik', 'persentase'])) ? $request->tipe_nilai : null,
             'input_min'  => (!$hasSub && $request->tipe_input === 'numerik') ? $request->input_min : null,
@@ -132,6 +134,7 @@ class KriteriaController extends Controller
                     DB::table('skala_linguistik')->insert([
                         'kriteria_id' => $id,
                         'label'       => $skala['label'],
+                        'definisi'    => $skala['definisi'] ?? null,
                         'urutan'      => $i + 1,
                         'created_at'  => now(),
                         'updated_at'  => now(),
@@ -149,19 +152,20 @@ class KriteriaController extends Controller
     public function storeSubKriteria(Request $request, $parentId)
     {
         $parent = DB::table('kriteria')->where('id', $parentId)->whereNull('parent_id')->first();
-            if (!$parent) abort(404);
+        if (!$parent) abort(404);
 
-            $isLinguistik = $request->tipe_input === 'linguistik';
+        $isLinguistik = $request->tipe_input === 'linguistik';
 
-            $request->validate([
-                'nama'          => 'required|string|max:255',
-                'tipe_input'    => 'required|in:numerik,linguistik,persentase',
-                'tipe_nilai'    => 'nullable|in:benefit,cost',
-                'input_min'     => 'nullable|numeric',
-                'input_max'     => 'nullable|numeric',
-                'skala'         => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
-                'skala.*.label' => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
-            ]);
+        $request->validate([
+            'nama'             => 'required|string|max:255',
+            'tipe_input'       => 'required|in:numerik,linguistik,persentase',
+            'tipe_nilai'       => 'nullable|in:benefit,cost',
+            'input_min'        => 'nullable|numeric',
+            'input_max'        => 'nullable|numeric',
+            'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
+            'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
+        ]);
 
         $id = DB::table('kriteria')->insertGetId([
             'nama'             => $request->nama,
@@ -181,6 +185,7 @@ class KriteriaController extends Controller
                 DB::table('skala_linguistik')->insert([
                     'kriteria_id' => $id,
                     'label'       => $skala['label'],
+                    'definisi'    => $skala['definisi'] ?? null,
                     'urutan'      => $i + 1,
                     'created_at'  => now(),
                     'updated_at'  => now(),
@@ -188,7 +193,6 @@ class KriteriaController extends Controller
             }
         }
 
-        // Redirect kembali dengan modal sub masih terbuka
         return redirect()->route('admin.kriteria.index')
             ->with('open_sub_modal', $parentId)
             ->with('open_sub_nama', $parent->nama)
@@ -203,20 +207,20 @@ class KriteriaController extends Controller
         $isLinguistik = $request->tipe_input === 'linguistik';
 
         $request->validate([
-            'nama'          => 'required|string|max:255',
-            'tipe_input'    => 'required|in:numerik,linguistik,persentase',
-            'tipe_nilai'    => 'nullable|in:benefit,cost',
-            'input_min'     => 'nullable|numeric',
-            'input_max'     => 'nullable|numeric',
-            'skala'         => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
-            'skala.*.label' => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'nama'             => 'required|string|max:255',
+            'tipe_input'       => 'required|in:numerik,linguistik,persentase',
+            'tipe_nilai'       => 'nullable|in:benefit,cost',
+            'input_min'        => 'nullable|numeric',
+            'input_max'        => 'nullable|numeric',
+            'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
+            'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
+            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
         ]);
 
         DB::table('kriteria')->where('id', $id)->update([
             'nama'       => $request->nama,
             'tipe_input' => $request->tipe_input,
-             'tipe_nilai' => in_array($request->tipe_input, ['numerik', 'persentase'])
-                    ? $request->tipe_nilai : null,
+            'tipe_nilai' => in_array($request->tipe_input, ['numerik', 'persentase']) ? $request->tipe_nilai : null,
             'input_min'  => $request->tipe_input === 'numerik' ? $request->input_min : null,
             'input_max'  => $request->tipe_input === 'numerik' ? $request->input_max : null,
             'updated_at' => now(),
@@ -228,6 +232,7 @@ class KriteriaController extends Controller
                 DB::table('skala_linguistik')->insert([
                     'kriteria_id' => $id,
                     'label'       => $skala['label'],
+                    'definisi'    => $skala['definisi'] ?? null,
                     'urutan'      => $i + 1,
                     'created_at'  => now(),
                     'updated_at'  => now(),
@@ -262,7 +267,6 @@ class KriteriaController extends Controller
         DB::table('skala_linguistik')->where('kriteria_id', $id)->delete();
         DB::table('kriteria')->where('id', $id)->delete();
 
-        // Kembali ke modal sub masih terbuka
         if ($parent) {
             return redirect()->route('admin.kriteria.index')
                 ->with('open_sub_modal', $parentId)
