@@ -31,7 +31,7 @@
     {{-- Header --}}
     <div class="flex items-center justify-between mb-5">
         <div>
-            <p class="text-sm text-gray-500">
+            <p class="text-sm text-gray-600">
                 Total <span class="font-medium text-gray-700">{{ $peserta->count() }}</span> peserta ·
                 <span class="text-green-600 font-medium">{{ $peserta->where('sudah_dinilai', true)->count() }}</span> sudah dinilai ·
                 <span class="text-amber-600 font-medium">{{ $peserta->where('sudah_dinilai', false)->count() }}</span> belum dinilai
@@ -39,7 +39,7 @@
         </div>
 
         @if($totalKriteria === 0)
-        <span class="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
+        <span class="text-sm text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-lg">
             ⚠ Belum ada kriteria — tambah kriteria dulu
         </span>
         @endif
@@ -50,11 +50,11 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="bg-[#2B124C] text-[#FBE4D8]">
-                    <th class="px-4 py-3 text-left font-medium text-xs">Peserta</th>
-                    <th class="px-4 py-3 text-left font-medium text-xs hidden lg:table-cell">Institut</th>
-                    <th class="px-4 py-3 text-left font-medium text-xs hidden lg:table-cell">Fungsi</th>
-                    <th class="px-4 py-3 text-center font-medium text-xs">Progress Penilaian</th>
-                    <th class="px-4 py-3 text-center font-medium text-xs">Status</th>
+                    <th class="px-4 py-3 text-left font-medium text-sm">Peserta</th>
+                    <th class="px-4 py-3 text-left font-medium text-sm hidden lg:table-cell">Institut</th>
+                    <th class="px-4 py-3 text-left font-medium text-sm hidden lg:table-cell">Fungsi</th>
+                    <th class="px-4 py-3 text-center font-medium text-sm">Progress Penilaian</th>
+                    <th class="px-4 py-3 text-center font-medium text-sm">Status</th>
                     <th class="px-4 py-3"></th>
                 </tr>
             </thead>
@@ -64,23 +64,23 @@
 
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-[#2B124C] flex items-center justify-center text-[#FBE4D8] text-xs font-semibold shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-[#2B124C] flex items-center justify-center text-[#FBE4D8] text-sm font-semibold shrink-0">
                                 {{ strtoupper(substr($p->nama, 0, 1)) }}
                             </div>
                             <div>
                                 <p class="font-medium text-gray-800 text-sm">{{ $p->nama }}</p>
-                                <p class="text-gray-400 text-xs">{{ $p->nim ?? '-' }}</p>
+                                <p class="text-gray-500 text-sm">{{ $p->nim ?? '-' }}</p>
                             </div>
                         </div>
                     </td>
 
-                    <td class="px-4 py-3 text-gray-600 text-xs hidden lg:table-cell">{{ $p->institut ?? '-' }}</td>
+                    <td class="px-4 py-3 text-gray-600 text-sm hidden lg:table-cell">{{ $p->institut ?? '-' }}</td>
 
                     <td class="px-4 py-3 hidden lg:table-cell">
                         @if($p->fungsi)
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#EDE8F5] text-[#522B5B]">{{ $p->fungsi }}</span>
                         @else
-                            <span class="text-gray-400 text-xs">-</span>
+                            <span class="text-gray-500 text-sm">-</span>
                         @endif
                     </td>
 
@@ -91,7 +91,7 @@
                                 <div class="h-1.5 rounded-full transition-all duration-300 {{ $p->sudah_dinilai ? 'bg-green-500' : 'bg-[#2B124C]' }}"
                                      style="width: {{ $pct }}%"></div>
                             </div>
-                            <span class="text-[10px] text-gray-400">{{ $p->jumlah_dinilai }}/{{ $totalKriteria }}</span>
+                            <span class="text-[10px] text-gray-500">{{ $p->jumlah_dinilai }}/{{ $totalKriteria }}</span>
                         </div>
                     </td>
 
@@ -105,7 +105,7 @@
 
                     <td class="px-4 py-3 text-right">
                         <button @click="openPenilaian({{ $p->id }}, '{{ addslashes($p->nama) }}')"
-                                class="text-xs px-3 py-1.5 rounded-lg border transition-all duration-150
+                                class="text-sm px-3 py-1.5 rounded-lg border transition-all duration-150
                                 {{ $p->sudah_dinilai
                                     ? 'border-[#522B5B] text-[#522B5B] hover:bg-[#EDE8F5]'
                                     : 'bg-[#2B124C] text-[#FBE4D8] border-[#2B124C] hover:bg-[#522B5B]' }}">
@@ -116,7 +116,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="px-4 py-12 text-center text-gray-400 text-sm">Belum ada data peserta.</td>
+                    <td colspan="6" class="px-4 py-12 text-center text-gray-500 text-sm">Belum ada data peserta.</td>
                 </tr>
                 @endforelse
             </tbody>
@@ -134,9 +134,9 @@
             <div class="flex items-center justify-between px-6 py-4 border-b border-[#F0E8F5] shrink-0">
                 <div>
                     <h3 class="font-semibold text-[#2B124C]">Isi Penilaian</h3>
-                    <p class="text-xs text-gray-400 mt-0.5">untuk: <span x-text="namaPeserta" class="font-medium text-gray-600"></span></p>
+                    <p class="text-sm text-gray-500 mt-0.5">untuk: <span x-text="namaPeserta" class="font-medium text-gray-600"></span></p>
                 </div>
-                <button @click="modalOpen = false" class="text-gray-400 hover:text-gray-600">
+                <button @click="modalOpen = false" class="text-gray-500 hover:text-gray-600">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -158,7 +158,7 @@
                     <div class="px-6 py-4 space-y-5">
                         @forelse($kriteria as $k)
                         <div>
-                            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                            <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-3">
                                 {{ $k->nama }}
                             </p>
 
@@ -166,12 +166,12 @@
                             <div class="space-y-3 pl-3 border-l-2 border-[#EDE8F5]">
                                 @foreach($k->subKriteria as $sub)
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-600 mb-1.5">
+                                    <label class="block text-sm font-medium text-gray-600 mb-1.5">
                                         {{ $sub->nama }}
                                         @if($sub->tipe_input === 'numerik')
-                                            <span class="text-gray-400 font-normal">({{ $sub->input_min ?? 0 }} – {{ $sub->input_max ?? 100 }})</span>
+                                            <span class="text-gray-500 font-normal">({{ $sub->input_min ?? 0 }} – {{ $sub->input_max ?? 100 }})</span>
                                         @elseif($sub->tipe_input === 'persentase')
-                                            <span class="text-gray-400 font-normal">(0% – 100%)</span>
+                                            <span class="text-gray-500 font-normal">(0% – 100%)</span>
                                         @endif
                                         @if(in_array($sub->tipe_input, ['numerik', 'persentase']) && $sub->tipe_nilai === 'cost')
                                             <span class="text-red-400 font-normal text-[10px]">· semakin rendah semakin baik</span>
@@ -196,22 +196,30 @@
                                                min="0" max="100" step="0.01"
                                                placeholder="0 – 100"
                                                class="w-full px-3 py-2 pr-8 border border-[#E8D8F0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#522B5B]">
-                                        <span class="absolute right-3 top-2 text-gray-400 text-sm">%</span>
+                                        <span class="absolute right-3 top-2 text-gray-500 text-sm">%</span>
                                     </div>
 
                                     @elseif($sub->tipe_input === 'linguistik')
-                                    <div class="flex flex-wrap gap-2" x-data="{ pilihan_{{ $sub->id }}: nilaiExisting[{{ $sub->id }}]?.nilai_linguistik ?? '' }">
+                                    <div class="space-y-1.5" x-data="{ pilihan_{{ $sub->id }}: nilaiExisting[{{ $sub->id }}]?.nilai_linguistik ?? '' }">
                                         @foreach($sub->skalaLinguistik as $skala)
-                                        <label class="flex items-center gap-1.5 px-3 py-1.5 border rounded-lg cursor-pointer transition-colors text-xs"
+                                        <label class="flex items-start gap-2.5 px-3 py-2 border rounded-lg cursor-pointer transition-colors"
                                                :class="pilihan_{{ $sub->id }} === '{{ $skala->label }}'
-                                                   ? 'border-[#522B5B] bg-[#EDE8F5] text-[#522B5B] font-medium'
-                                                   : 'border-[#E8D8F0] text-gray-600 hover:border-[#522B5B]'">
+                                                   ? 'border-[#522B5B] bg-[#EDE8F5]'
+                                                   : 'border-[#E8D8F0] hover:border-[#522B5B]'">
                                             <input type="radio"
                                                    name="penilaian[{{ $sub->id }}]"
                                                    value="{{ $skala->label }}"
                                                    x-model="pilihan_{{ $sub->id }}"
-                                                   class="sr-only">
-                                            {{ $skala->label }}
+                                                   class="mt-0.5 accent-[#522B5B] shrink-0">
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-medium"
+                                                   :class="pilihan_{{ $sub->id }} === '{{ $skala->label }}' ? 'text-[#522B5B]' : 'text-gray-700'">
+                                                    {{ $skala->label }}
+                                                </p>
+                                                @if($skala->definisi)
+                                                <p class="text-[11px] text-gray-500 mt-0.5">{{ $skala->definisi }}</p>
+                                                @endif
+                                            </div>
                                         </label>
                                         @endforeach
                                     </div>
@@ -223,7 +231,7 @@
                             @else
                             {{-- Kriteria tanpa sub kriteria --}}
                             @if($k->tipe_input === 'numerik')
-                            <label class="block text-xs text-gray-400 mb-1.5">
+                            <label class="block text-sm text-gray-600 mb-1.5">
                                 Range: {{ $k->input_min ?? 0 }} – {{ $k->input_max ?? 100 }}
                                 @if($k->tipe_nilai === 'cost')
                                     <span class="text-red-400">· semakin rendah semakin baik</span>
@@ -239,7 +247,7 @@
                                    class="w-full px-3 py-2 border border-[#E8D8F0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#522B5B]">
 
                             @elseif($k->tipe_input === 'persentase')
-                            <label class="block text-xs text-gray-400 mb-1.5">
+                            <label class="block text-sm text-gray-500 mb-1.5">
                                 0% – 100%
                                 @if($k->tipe_nilai === 'cost')
                                     <span class="text-red-400">· semakin rendah semakin baik</span>
@@ -252,13 +260,13 @@
                                        min="0" max="100" step="0.01"
                                        placeholder="0 – 100"
                                        class="w-full px-3 py-2 pr-8 border border-[#E8D8F0] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#522B5B]">
-                                <span class="absolute right-3 top-2 text-gray-400 text-sm">%</span>
+                                <span class="absolute right-3 top-2 text-gray-500 text-sm">%</span>
                             </div>
 
                             @elseif($k->tipe_input === 'linguistik')
                             <div class="flex flex-wrap gap-2" x-data="{ pilihan_{{ $k->id }}: nilaiExisting[{{ $k->id }}]?.nilai_linguistik ?? '' }">
                                 @foreach($k->skalaLinguistik as $skala)
-                                <label class="flex items-center gap-1.5 px-3 py-1.5 border rounded-lg cursor-pointer transition-colors text-xs"
+                                <label class="flex items-center gap-1.5 px-3 py-1.5 border rounded-lg cursor-pointer transition-colors text-sm"
                                        :class="pilihan_{{ $k->id }} === '{{ $skala->label }}'
                                            ? 'border-[#522B5B] bg-[#EDE8F5] text-[#522B5B] font-medium'
                                            : 'border-[#E8D8F0] text-gray-600 hover:border-[#522B5B]'">
@@ -280,7 +288,7 @@
                         @endif
 
                         @empty
-                        <p class="text-sm text-gray-400 text-center py-4">Belum ada kriteria yang dikonfigurasi.</p>
+                        <p class="text-sm text-gray-500 text-center py-4">Belum ada kriteria yang dikonfigurasi.</p>
                         @endforelse
                     </div>
 

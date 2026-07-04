@@ -165,12 +165,12 @@
         {{-- ── PAGE CONTENT ── --}}
         <main class="flex-1 px-4 sm:px-6 pt-5 pb-6">
 
-            @if(session('success'))
+            {{-- @if(session('success'))
                 <div class="mb-4 px-4 py-3 bg-[#E8F5ED] border border-[#2D6A4A]/20 text-[#2D6A4A] rounded-2xl text-sm flex items-center gap-2">
                     <i class="ti ti-circle-check text-base shrink-0"></i>
                     {{ session('success') }}
                 </div>
-            @endif
+            @endif --}}
 
             @if(session('error'))
                 <div class="mb-4 px-4 py-3 bg-[#F5E8EF] border border-[#7A2D4A]/20 text-[#7A2D4A] rounded-2xl text-sm flex items-center gap-2">

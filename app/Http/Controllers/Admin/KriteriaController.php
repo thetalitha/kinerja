@@ -57,7 +57,7 @@ class KriteriaController extends Controller
             'input_max'        => 'nullable|numeric',
             'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
             'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
-            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
+            'skala.*.definisi' => 'nullable|string|max:1000',
         ]);
 
         $id = DB::table('kriteria')->insertGetId([
@@ -114,7 +114,7 @@ class KriteriaController extends Controller
             'input_max'        => 'nullable|numeric',
             'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
             'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
-            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
+            'skala.*.definisi' => 'nullable|string|max:1000',
         ]);
 
         DB::table('kriteria')->where('id', $id)->update([
@@ -164,7 +164,7 @@ class KriteriaController extends Controller
             'input_max'        => 'nullable|numeric',
             'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
             'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
-            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
+            'skala.*.definisi' => 'nullable|string|max:1000',
         ]);
 
         $id = DB::table('kriteria')->insertGetId([
@@ -214,7 +214,7 @@ class KriteriaController extends Controller
             'input_max'        => 'nullable|numeric',
             'skala'            => $isLinguistik ? 'required|array|min:2' : 'nullable|array',
             'skala.*.label'    => $isLinguistik ? 'required|string|max:100' : 'nullable|string|max:100',
-            'skala.*.definisi' => $isLinguistik ? 'required|string|max:1000' : 'nullable|string|max:1000',
+            'skala.*.definisi' => 'nullable|string|max:1000',
         ]);
 
         DB::table('kriteria')->where('id', $id)->update([
